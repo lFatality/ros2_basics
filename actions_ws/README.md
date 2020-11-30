@@ -7,6 +7,9 @@ Workspace to give an overview how to use ROS2 actions.
 - Build the workspace  
 `colcon build`
 
+- Source the workspace  
+`source install/setup.bash`
+
 - Start the action server  
 `rosrun actions_example action_server_node`
 
@@ -112,18 +115,31 @@ rosidl_target_interfaces(action_server_node ${PROJECT_NAME}
 Note: It's good practice to put your interface files (messages, services, actions)
 into a separate package. This enables other users to build only the interfaces without
 having to build anything else. You see this reflected in the `package_name_msgs` packages
-that you can find for well-known ROS packages (e.g. `turtlebot_msgs`, https://github.com/ROBOTIS-GIT/turtlebot3_msgs).
+that you can find for well-known ROS packages (e.g. `turtlebot_msgs`, https://github.com/ROBOTIS-GIT/turtlebot3_msgs). That being said, sometimes it can be convenient to put the interfaces in the same package, e.g. when the package is not planned to be used in production code and only used for learning / testing purposes.
 
 ### Test that it worked
+Start the action server: 
+``` 
+source install/setup.bash
+rosrun actions_example action_server_node
 ```
-ros2 action send_goal /published_action_name your_package_name/action/YourActionName your_parameter:\ your_value\
+
+Then publish a goal to it with (generic example, find a specific below. Don't forget the space after the `:` symbol):
+
+```
+ros2 action send_goal /published_action_name your_package_name/action/YourActionName "{your_parameter: your_int_value, your_other_parameter: 'your_string_value'}"
 ```
 
 The `published_action_name` is set as a String name when you create the server.
 
+To also be able to see the feedback, use the `-f` or `--feedback` option.
+```
+ros2 action send_goal -f /published_action_name your_package_name/action/YourActionName "{your_parameter: your_int_value, your_other_parameter: 'your_string_value'}"
+```
+
 Example:
 ```
-ros2 action send_goal /fibonacci actions_example/action/Fibonacci order:\ 10\
+ros2 action send_goal --feedback /fibonacci actions_example/action/Fibonacci order:\ 10
 ```
 
 Note: Cancelling the goal with `Ctrl+C` will cause a RCLError exception on the server.
