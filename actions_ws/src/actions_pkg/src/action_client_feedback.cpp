@@ -59,50 +59,50 @@ int main(int argc, char ** argv)
   auto wait_result = rclcpp::spin_until_future_complete(
     node,
     result_future,
-    std::chrono::seconds(3));
+    std::chrono::seconds(13)); // if you want to try to cancel, reduce the timeout
 
   if (rclcpp::FutureReturnCode::TIMEOUT == wait_result) {
     RCLCPP_INFO(node->get_logger(), "canceling goal");
     // Cancel the goal since it is taking too long
     auto cancel_result_future = action_client->async_cancel_goal(goal_handle);
     if (rclcpp::spin_until_future_complete(node, cancel_result_future) !=
-      rclcpp::FutureReturnCode::SUCCESS)
-    {
-      RCLCPP_ERROR(node->get_logger(), "failed to cancel goal");
-      rclcpp::shutdown();
-      return 1;
+        rclcpp::FutureReturnCode::SUCCESS)
+        {
+        RCLCPP_ERROR(node->get_logger(), "failed to cancel goal");
+        rclcpp::shutdown();
+        return 1;
+        }
+        RCLCPP_INFO(node->get_logger(), "goal is being canceled");
+
+    } else if (rclcpp::FutureReturnCode::SUCCESS != wait_result) {
+        RCLCPP_ERROR(node->get_logger(), "failed to get result");
+        rclcpp::shutdown();
+        return 1;
     }
-    RCLCPP_INFO(node->get_logger(), "goal is being canceled");
 
-  } else if (rclcpp::FutureReturnCode::SUCCESS != wait_result) {
-    RCLCPP_ERROR(node->get_logger(), "failed to get result");
-    rclcpp::shutdown();
-    return 1;
-  }
+    RCLCPP_INFO(node->get_logger(), "Waiting for result");
+    if (rclcpp::spin_until_future_complete(node, result_future) !=
+        rclcpp::FutureReturnCode::SUCCESS)
+    {
+        RCLCPP_ERROR(node->get_logger(), "get result call failed :(");
+        return 1;
+    }
 
-  RCLCPP_INFO(node->get_logger(), "Waiting for result");
-  if (rclcpp::spin_until_future_complete(node, result_future) !=
-    rclcpp::FutureReturnCode::SUCCESS)
-  {
-    RCLCPP_ERROR(node->get_logger(), "get result call failed :(");
-    return 1;
-  }
-
-  rclcpp_action::ClientGoalHandle<Fibonacci>::WrappedResult wrapped_result = result_future.get();
-  switch (wrapped_result.code) {
+    rclcpp_action::ClientGoalHandle<Fibonacci>::WrappedResult wrapped_result = result_future.get();
+    switch (wrapped_result.code) {
     case rclcpp_action::ResultCode::SUCCEEDED:
-      break;
+        break;
     case rclcpp_action::ResultCode::ABORTED:
-      RCLCPP_ERROR(node->get_logger(), "Goal was aborted");
-      return 1;
+        RCLCPP_ERROR(node->get_logger(), "Goal was aborted");
+        return 1;
     case rclcpp_action::ResultCode::CANCELED:
-      RCLCPP_ERROR(node->get_logger(), "Goal was canceled");
-      return 1;
+        RCLCPP_ERROR(node->get_logger(), "Goal was canceled");
+        return 1;
     default:
-      RCLCPP_ERROR(node->get_logger(), "Unknown result code");
-      return 1;
-  }
+        RCLCPP_ERROR(node->get_logger(), "Unknown result code");
+        return 1;
+    }
 
-  rclcpp::shutdown();
-  return 0;
+    rclcpp::shutdown();
+    return 0;
 }
