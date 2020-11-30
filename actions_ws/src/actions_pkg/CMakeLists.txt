@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(actions_pkg)
+project(actions_example)
 
 # Default to C99
 if(NOT CMAKE_C_STANDARD)

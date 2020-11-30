@@ -14,12 +14,12 @@
 
 #include <inttypes.h>
 #include <memory>
-#include "actions_pkg/action/fibonacci.hpp"
+#include "actions_example/action/fibonacci.hpp"
 #include "rclcpp/rclcpp.hpp"
 // TODO(jacobperron): Remove this once it is included as part of 'rclcpp.hpp'
 #include "rclcpp_action/rclcpp_action.hpp"
 
-using Fibonacci = actions_pkg::action::Fibonacci;
+using Fibonacci = actions_example::action::Fibonacci;
 
 
 int main(int argc, char ** argv)

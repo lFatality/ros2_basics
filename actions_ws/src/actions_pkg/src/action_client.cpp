@@ -16,7 +16,7 @@
 #include <memory>
 #include <string>
 #include <iostream>
-#include "actions_pkg/action/fibonacci.hpp"
+#include "actions_example/action/fibonacci.hpp"
 #include "rclcpp/rclcpp.hpp"
 // TODO(jacobperron): Remove this once it is included as part of 'rclcpp.hpp'
 #include "rclcpp_action/rclcpp_action.hpp"
@@ -24,7 +24,7 @@
 class MinimalActionClient : public rclcpp::Node
 {
 public:
-  using Fibonacci = actions_pkg::action::Fibonacci;
+  using Fibonacci = actions_example::action::Fibonacci;
   using GoalHandleFibonacci = rclcpp_action::ClientGoalHandle<Fibonacci>;
 
   explicit MinimalActionClient(const rclcpp::NodeOptions & node_options = rclcpp::NodeOptions())

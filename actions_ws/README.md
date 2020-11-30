@@ -1,14 +1,24 @@
 # ROS2 Actions
 
+Workspace to give an overview how to use ROS2 actions.
+
 ## How to run
 
+- Build the workspace  
+`colcon build`
+
+- Start the action server  
+`rosrun actions_example action_server_node`
+
+- Start a client  
+`rosrun actions_example action_client_node`  
+`rosrun actions_example action_client_feedback_node`
+`rosrun actions_example action_client_cancel_node`
 
 ## Useful documentation
 https://index.ros.org/doc/ros2/Tutorials/Actions/Creating-an-Action/  
 https://index.ros.org/doc/ros2/Tutorials/Actions/Writing-an-Action-Client-CPP/  
 https://design.ros2.org/articles/actions.html
-
-___
 
 ## Steps necessary
 
@@ -63,7 +73,7 @@ source install/setup.bash
 ros2 interface show action_tutorials/action/Fibonacci
 ```
 
-## ROS2 Action server
+## 2.) ROS2 Action server
 
 ### `server.cpp`
 
@@ -113,13 +123,13 @@ The `published_action_name` is set as a String name when you create the server.
 
 Example:
 ```
-ros2 action send_goal /fibonacci actions_pkg/action/Fibonacci order:\ 10\
+ros2 action send_goal /fibonacci actions_example/action/Fibonacci order:\ 10\
 ```
 
 Note: Cancelling the goal with `Ctrl+C` will cause a RCLError exception on the server.
 Using a client written in code and cancelling the goal does not result in the same error.
 
-## ROS2 Action client
+## 3.) ROS2 Action client
 
 ### `CMakeLists.txt`
 
@@ -152,13 +162,13 @@ your_package_name::action::YourActionName
 #### Problem 2:  
 Compiling the `action_client.cpp` results in:
 ```
-no match for ‘operator=’ (operand types are ‘rclcpp_action::Client<actions_pkg::action::Fibonacci>::GoalResponseCallback’ 
+no match for ‘operator=’ (operand types are ‘rclcpp_action::Client<actions_example::action::Fibonacci>::GoalResponseCallback’ 
 
-{aka ‘std::function<void(std::shared_future<std::shared_ptr<rclcpp_action::ClientGoalHandle<actions_pkg::action::Fibonacci> > >)>’} 
+{aka ‘std::function<void(std::shared_future<std::shared_ptr<rclcpp_action::ClientGoalHandle<actions_example::action::Fibonacci> > >)>’} 
 
-and ‘std::_Bind_helper<false, void (MinimalActionClient::*)(std::shared_ptr<rclcpp_action::ClientGoalHandle<actions_pkg::action::Fibonacci> >), MinimalActionClient*, const std::_Placeholder<1>&>::type’ 
+and ‘std::_Bind_helper<false, void (MinimalActionClient::*)(std::shared_ptr<rclcpp_action::ClientGoalHandle<actions_example::action::Fibonacci> >), MinimalActionClient*, const std::_Placeholder<1>&>::type’ 
 
-{aka ‘std::_Bind<void (MinimalActionClient::*(MinimalActionClient*, std::_Placeholder<1>))(std::shared_ptr<rclcpp_action::ClientGoalHandle<actions_pkg::action::Fibonacci> >)>’})
+{aka ‘std::_Bind<void (MinimalActionClient::*(MinimalActionClient*, std::_Placeholder<1>))(std::shared_ptr<rclcpp_action::ClientGoalHandle<actions_example::action::Fibonacci> >)>’})
 ```
 
 #### Solution 2:
