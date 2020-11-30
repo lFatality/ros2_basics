@@ -166,3 +166,16 @@ You're probably on the wrong branch. Select the branch for your ROS distro.
 
 Side note:
 This was caused because it was attempted to bind a function with an `GoalHandleFibonacci::SharedPtr>` argument to a function with an `std::shared_future<GoalHandleFibonacci::SharedPtr>` argument. To get the `GoalHandleFibonacci::SharedPtr>` argument you can use the `get()` function on the future object.
+
+#### Problem 3:
+```
+undefined reference to `rosidl_action_type_support_t const* rosidl_typesupport_cpp::get_action_type_support_handle<example_interfaces::action::Fibonacci>()'
+```
+
+#### Solution 3:
+Your include path for the action or the action definition are probably incorrect.
+Did you use your package name and the correct case?
+```
+#include "your_pkg_name/action/your_action_name.hpp"
+your_package_name::action::YourActionName
+```

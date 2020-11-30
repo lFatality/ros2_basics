@@ -12,23 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <functional>
+#include <inttypes.h>
 #include <memory>
-#include <thread>
-
 #include "actions_pkg/action/fibonacci.hpp"
 #include "rclcpp/rclcpp.hpp"
 // TODO(jacobperron): Remove this once it is included as part of 'rclcpp.hpp'
 #include "rclcpp_action/rclcpp_action.hpp"
 
-class FibonacciActionServer : public rclcpp::Node
+class MinimalActionServer : public rclcpp::Node
 {
 public:
   using Fibonacci = actions_pkg::action::Fibonacci;
   using GoalHandleFibonacci = rclcpp_action::ServerGoalHandle<Fibonacci>;
 
-  explicit FibonacciActionServer(const rclcpp::NodeOptions & options = rclcpp::NodeOptions())
-  : Node("fibonacci_action_server", options)
+  explicit MinimalActionServer(const rclcpp::NodeOptions & options = rclcpp::NodeOptions())
+  : Node("minimal_action_server", options)
   {
     using namespace std::placeholders;
 
@@ -38,9 +36,9 @@ public:
       this->get_node_logging_interface(),
       this->get_node_waitables_interface(),
       "fibonacci",
-      std::bind(&FibonacciActionServer::handle_goal, this, _1, _2),
-      std::bind(&FibonacciActionServer::handle_cancel, this, _1),
-      std::bind(&FibonacciActionServer::handle_accepted, this, _1));
+      std::bind(&MinimalActionServer::handle_goal, this, _1, _2),
+      std::bind(&MinimalActionServer::handle_cancel, this, _1),
+      std::bind(&MinimalActionServer::handle_accepted, this, _1));
   }
 
 private:
@@ -107,15 +105,15 @@ private:
   {
     using namespace std::placeholders;
     // this needs to return quickly to avoid blocking the executor, so spin up a new thread
-    std::thread{std::bind(&FibonacciActionServer::execute, this, _1), goal_handle}.detach();
+    std::thread{std::bind(&MinimalActionServer::execute, this, _1), goal_handle}.detach();
   }
-};  // class FibonacciActionServer
+};  // class MinimalActionServer
 
 int main(int argc, char ** argv)
 {
   rclcpp::init(argc, argv);
 
-  auto action_server = std::make_shared<FibonacciActionServer>();
+  auto action_server = std::make_shared<MinimalActionServer>();
 
   rclcpp::spin(action_server);
 

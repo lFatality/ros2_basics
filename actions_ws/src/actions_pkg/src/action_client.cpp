@@ -12,13 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <chrono>
-#include <cinttypes>
-#include <functional>
-#include <future>
+#include <inttypes.h>
 #include <memory>
 #include <string>
-
+#include <iostream>
 #include "actions_pkg/action/fibonacci.hpp"
 #include "rclcpp/rclcpp.hpp"
 // TODO(jacobperron): Remove this once it is included as part of 'rclcpp.hpp'
@@ -88,9 +85,10 @@ private:
   rclcpp::TimerBase::SharedPtr timer_;
   bool goal_done_;
 
-  void goal_response_callback(std::shared_future<GoalHandleFibonacci::SharedPtr> goal_handle)
+  void goal_response_callback(std::shared_future<GoalHandleFibonacci::SharedPtr> future)
   {
-    if (!goal_handle.get()) {
+    auto goal_handle = future.get();
+    if (!goal_handle) {
       RCLCPP_ERROR(this->get_logger(), "Goal was rejected by server");
     } else {
       RCLCPP_INFO(this->get_logger(), "Goal accepted by server, waiting for result");
