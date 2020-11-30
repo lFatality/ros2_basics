@@ -12,7 +12,7 @@ Workspace to give an overview how to use ROS2 actions.
 
 - Start a client  
 `rosrun actions_example action_client_node`  
-`rosrun actions_example action_client_feedback_node`
+`rosrun actions_example action_client_feedback_node`  
 `rosrun actions_example action_client_cancel_node`
 
 ## Useful documentation
