@@ -34,12 +34,39 @@ ament_target_dependencies(action_server_node
     rclcpp_action
 )
 
+add_executable(action_client_node src/action_client.cpp)
+ament_target_dependencies(action_client_node
+    rclcpp
+    rclcpp_action
+)
+
+add_executable(action_client_cancel_node src/action_client_cancel.cpp)
+ament_target_dependencies(action_client_cancel_node
+    rclcpp
+    rclcpp_action
+)
+
+add_executable(action_client_feedback_node src/action_client_feedback.cpp)
+ament_target_dependencies(action_client_feedback_node
+    rclcpp
+    rclcpp_action
+)
+
 install(TARGETS
     action_server_node
+    action_client_node
+    action_client_cancel_node
+    action_client_feedback_node
     DESTINATION lib/${PROJECT_NAME})
 
 # --- use messages from same package ---
 rosidl_target_interfaces(action_server_node ${PROJECT_NAME}
+    "rosidl_typesupport_cpp")
+rosidl_target_interfaces(action_client_node ${PROJECT_NAME}
+    "rosidl_typesupport_cpp")
+rosidl_target_interfaces(action_client_cancel_node ${PROJECT_NAME}
+    "rosidl_typesupport_cpp")
+rosidl_target_interfaces(action_client_feedback_node ${PROJECT_NAME}
     "rosidl_typesupport_cpp")
 
 
